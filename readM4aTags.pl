@@ -3,6 +3,8 @@
 use warnings;
 use strict;
 
+binmode(STDOUT, ":encoding(UTF-8)");
+
 use Audio::Scan qr/scan/;
 local $ENV{AUDIO_SCAN_NO_ARTWORK} = 1;
 
