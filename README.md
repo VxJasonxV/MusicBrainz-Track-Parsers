@@ -28,9 +28,12 @@ Invoke a file format script suitable for the media in your files, pipe to sort i
 * [DateTime](http://search.cpan.org/~drolsky/DateTime-0.70/lib/DateTime.pm)
 * [DateTime::Format::Duration](http://search.cpan.org/~rickm/DateTime-Format-Duration-1.03a/lib/DateTime/Format/Duration.pm)
 
+* Requires an API Key from Bandcamp. See [http://bandcamp.com/developer#key_request](http://bandcamp.com/developer#key_request)
+* Add the API Key into your environment as the value of the $BCAPIKEY variable. I'm not going to explain how to do this.
+
 ## Usage ##
 
-Visit a bandcamp URL, a specific album or even track as part of an album. Copy the URL and paste it into a terminal as an argument to the bandcamp script.
+Visit a Bandcamp URL, a specific album or even track as part of an album. Copy the URL and paste it into a terminal as an argument to the Bandcamp script.
 
 Ex. `perl bandcamp.pl "http://rainbowdragoneyes.bandcamp.com/track/seize-my-day"`
 
