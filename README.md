@@ -44,3 +44,26 @@ Artists with only one Album/Track will have that information automatically print
 * Refactor
 * Refactor
 * Refactor
+
+--------
+
+# Beatport Parser #
+
+## Requirements ##
+
+* Perl >= 5.10
+* [URI](http://search.cpan.org/~gaas/URI-1.59/URI.pm)
+* [LWP::Simple](http://search.cpan.org/~gaas/libwww-perl-6.03/lib/LWP/Simple.pm)
+* [JSON](http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm) >= 2.0 (JSON::XS generally recommended, additionally.)
+
+## Usage ##
+
+Visit a beatport.com release page, it MUST begin with beatport.com/release. Copy the URL and paste it into a terminal as an argument to the Beatport script.
+
+Ex. `perl beatport.pl "http://www.beatport.com/release/different-morals/393408"`
+
+Remixer information is discarded, as it's not possible to do Adv. Relationships in the Add Release interface. They are not currently displayed in any meaningful manner, and it is up to you to do your due diligence and add their rels after the release is entered.
+
+## Roadmap / Wishlist ##
+
+Not being familiar enough with the Beatport catalog nor the API means... nothing really? General cleanup and some error handling maybe?
