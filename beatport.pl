@@ -7,7 +7,7 @@ use feature ':5.10';
 
 my $URI = shift @ARGV unless not defined @ARGV;
 
-use Carp qw(croak);
+use Carp qw(croak); # Yay Coda bug.
 
 use URI;
 use URI::Escape;
@@ -27,26 +27,32 @@ my $queryURI = APIROOT . $type . '?id=' . $id;
 my $content = get($queryURI);
 my $j = decode_json $content;
 
+use Data::Dumper;
+my @release;
+
 for(my $i = 0; $i < $j->{'metadata'}->{'tracks'}->{'count'}; $i++)
 {
-	my $track = $j->{'results'}->{'tracks'}->[$i];
-	my $artist = $track->{'artists'};
+	my %track;
+	my $r = $j->{'results'}->{'tracks'}->[$i];
+	
+	$track{'title'} = $r->{'title'};
+	$track{'length'} = $r->{'length'};
 
-	my $t = $track->{'title'};
 	my @as;
-
-	for(@{$artist})
+	for(@{$r->{'artists'}})
 	{
-			if($_->{'type'} ne 'artist')
-			{
-				next;
-			}
+		if($_->{'type'} ne 'artist')
+		{
+			next;
+		}
 
-			push @as, $_->{'name'};
+		push @{$track{'artist'}}, $_->{'name'};
 	}
-
-	print sprintf('%02d', $i+1) . '.	' . $t . ' - ' . join(', ', @as) . '	' . $track->{'length'} . "\n";
+	
+	push @release, \%track;
 }
+
+print Dumper(\@release);
 
 __END__
 http://api.beatport.com/
