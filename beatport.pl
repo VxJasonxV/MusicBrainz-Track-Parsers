@@ -89,6 +89,7 @@ my $tmp = File::Temp->new(
 
 binmode( $tmp, ":utf8" );
 
+# http://musicbrainz.org/doc/Release_Editor_Seeding
 print $tmp <<HTML;
 <html>
 <head>
@@ -126,7 +127,7 @@ HTML
 
 my @cmd = ("open", "$tmp");
 system(@cmd);
-<STDIN>;
+sleep 5;
 
 __END__
 http://api.beatport.com/
@@ -134,3 +135,4 @@ http://api.beatport.com/
 http://api.beatport.com/beatport-detail-pages.html
 
 http://www.beatport.com/release/different-morals/393408
+
