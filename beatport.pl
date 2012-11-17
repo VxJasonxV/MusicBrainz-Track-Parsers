@@ -100,6 +100,7 @@ print $tmp <<HTML;
 <input type="hidden" name="name" value="${release{'title'}}" />
 <input type="hidden" name="artist_credit.names.0.name" value="${release{'artist'}}" />
 <input type="hidden" name="country" value="XW" />
+<input type="hidden" name="packaging" value="none" />
 <input type="hidden" name="labels.0.name" value="${release{'label'}}" />
 <input type="hidden" name="labels.0.catalog_number" value="${release{'catno'}}" />
 <input type="hidden" name="date.year" value="${release{'relyear'}}" />
@@ -110,6 +111,7 @@ HTML
 my $i = 0;
 for (@{$release{'tracks'}})
 {
+	print $tmp "<input type='hidden' name='mediums.0.format' value=\"digital media\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.name' value=\"$_->{'title'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.artist_credit.names.0.name' value=\"$_->{'artist'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.length' value=\"$_->{'length'}\" />\n";
