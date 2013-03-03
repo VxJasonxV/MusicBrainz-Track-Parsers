@@ -106,12 +106,12 @@ print $tmp <<HTML;
 <input type="hidden" name="date.year" value="${release{'relyear'}}" />
 <input type="hidden" name="date.month" value="${release{'relmonth'}}" />
 <input type="hidden" name="date.day" value="${release{'relday'}}" />
+<input type="hidden" name="mediums.0.format" value="Digital Media" />
 HTML
 
 my $i = 0;
 for (@{$release{'tracks'}})
 {
-	print $tmp "<input type='hidden' name='mediums.0.format_id' value=\"12\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.name' value=\"$_->{'title'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.artist_credit.names.0.name' value=\"$_->{'artist'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.length' value=\"$_->{'length'}\" />\n";
