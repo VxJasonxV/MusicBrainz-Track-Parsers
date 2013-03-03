@@ -12,9 +12,9 @@ use Carp qw(croak); # Yay Coda bug.
 sub strip_non_main_artists
 {
 	croak "Oops no artist!" unless @_;
-	
+
 	my @artists = shift @_;
-	
+
 	if( scalar(@artists) == 1)
 	{ return $artists[0]->{'name'}; }
 
@@ -68,12 +68,12 @@ for(my $i = 0; $i < $j->{'metadata'}->{'tracks'}->{'count'}; $i++)
 {
 	my %track;
 	my $s = $j->{'results'}->{'tracks'}->[$i];
-	
+
 	$track{'title'} = $s->{'title'};
 	$track{'length'} = $s->{'length'};
 
 	$track{'artist'} = strip_non_main_artists(@{$s->{'artists'}});
-	
+
 	push @{$release{'tracks'}}, \%track;
 }
 
@@ -111,7 +111,7 @@ HTML
 my $i = 0;
 for (@{$release{'tracks'}})
 {
-	print $tmp "<input type='hidden' name='mediums.0.format' value=\"digital media\" />\n";
+	print $tmp "<input type='hidden' name='mediums.0.format_id' value=\"12\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.name' value=\"$_->{'title'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.artist_credit.names.0.name' value=\"$_->{'artist'}\" />\n";
 	print $tmp "<input type='hidden' name='mediums.0.track.$i.length' value=\"$_->{'length'}\" />\n";
