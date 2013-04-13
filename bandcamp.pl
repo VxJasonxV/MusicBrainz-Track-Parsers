@@ -39,11 +39,6 @@ sub determine_bandcamp_feature
 {
 }
 
-unless($u->host =~ m/bandcamp\.com$/)
-{
-	croak "bandcamp.com must be in the URI. Yes, I\'m aware that Bandcamp\'s Domain Mapping allows bands to completely hide the name bandcamp. Sorry. Maybe I\'ll implement it in a future version. Or you could do it now and send me a pull request. http://github.com/VxJasonxV Thanks for reading.";
-}
-
 if($u->host eq 'api.bandcamp.com')
 {
 	# Pass the first path option to the relevent parser.
