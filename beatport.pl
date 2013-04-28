@@ -123,6 +123,7 @@ print $tmp <<HTML;
 <input type="hidden" name="as_auto_editor" value="1" />
 <input type="submit" name="submit" value="Just click me" />
 </form>
+<script>document.forms[0].submit()</script>
 </body>
 </html>
 HTML
