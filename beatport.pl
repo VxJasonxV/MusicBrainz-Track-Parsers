@@ -96,7 +96,7 @@ print $tmp <<HTML;
 <title>Submit release to MusicBrainz</title>
 </head>
 <body>
-<form method="POST" action="http://musicbrainz.org/release/add">
+<form action="http://musicbrainz.org/release/add" method="post">
 <input type="hidden" name="name" value="${release{'title'}}" />
 <input type="hidden" name="artist_credit.names.0.name" value="${release{'artist'}}" />
 <input type="hidden" name="country" value="XW" />
@@ -121,7 +121,7 @@ for (@{$release{'tracks'}})
 print $tmp <<HTML;
 <input type="hidden" name="edit_note" value="Imported from $u" />
 <input type="hidden" name="as_auto_editor" value="1" />
-<input type="submit" name="submit" value="Just click me" />
+<input type="submit" value="Just click me" />
 </form>
 <script>document.forms[0].submit()</script>
 </body>
