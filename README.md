@@ -22,11 +22,11 @@ Invoke a file format script suitable for the media in your files, pipe to sort i
 ## Requirements ##
 
 * Perl >= 5.10. I'm not going to explain how to get it nor upgrade to it.
-* [URI](http://search.cpan.org/~gaas/URI-1.59/URI.pm)
-* [LWP::Simple](http://search.cpan.org/~gaas/libwww-perl-6.03/lib/LWP/Simple.pm)
-* [JSON](http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm) >= 2.0 (JSON::XS generally recommended, additionally.)
-* [DateTime](http://search.cpan.org/~drolsky/DateTime-0.70/lib/DateTime.pm)
-* [DateTime::Format::Duration](http://search.cpan.org/~rickm/DateTime-Format-Duration-1.03a/lib/DateTime/Format/Duration.pm)
+* [URI](https://metacpan.org/pod/URI)
+* [LWP::Simple](https://metacpan.org/pod/LWP::Simple)
+* [JSON](https://metacpan.org/pod/JSON) >= 2.0 (JSON::XS generally recommended, additionally.)
+* [DateTime](https://metacpan.org/pod/DateTime)
+* [DateTime::Format::Duration](https://metacpan.org/pod/DateTime::Format::Duration)
 
 * Requires an API Key from Bandcamp. See [http://bandcamp.com/developer#key_request](http://bandcamp.com/developer#key_request)
 * Add the API Key into your environment as the value of the $BCAPIKEY variable. I'm not going to explain how to do this.
@@ -52,9 +52,11 @@ Artists with only one Album/Track will have that information automatically print
 ## Requirements ##
 
 * Perl >= 5.10
-* [URI](http://search.cpan.org/~gaas/URI-1.59/URI.pm)
-* [LWP::Simple](http://search.cpan.org/~gaas/libwww-perl-6.03/lib/LWP/Simple.pm)
-* [JSON](http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm) >= 2.0 (JSON::XS generally recommended, additionally.)
+* [LWP::Simple](https://metacpan.org/pod/LWP::Simple)
+* [JSON](https://metacpan.org/pod/JSON) >= 2.0 (JSON::XS generally recommended, additionally.)
+* [Carp](https://metacpan.org/pod/Carp)
+* [HTML::Query](https://metacpan.org/pod/HTML::Query)
+* [File::Temp](https://metacpan.org/pod/File::Temp)
 
 ## Usage ##
 
@@ -62,8 +64,10 @@ Visit a beatport.com release page, it MUST begin with beatport.com/release. Copy
 
 Ex. `perl beatport.pl "http://www.beatport.com/release/different-morals/393408"`
 
-Remixer information is discarded, as it's not possible to do Adv. Relationships in the Add Release interface. They are not currently displayed in any meaningful manner, and it is up to you to do your due diligence and add their rels after the release is entered.
+## Caveats ##
+
+Artist information may be quite a bit wacky, mostly because Beatport's artist classification is insanity. Please take care to check that all artist credits are correct. If you know more than me about how Beatport represents their artists, [let me know!](https://github.com/VxJasonxV/MusicBrainz-Track-Parsers/issues)
 
 ## Roadmap / Wishlist ##
 
-Not being familiar enough with the Beatport catalog nor the API means... nothing really? General cleanup and some error handling maybe?
+* General cleanup and some error handling maybe?
