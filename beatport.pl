@@ -5,10 +5,7 @@ use strict;
 
 use feature ':5.10';
 
-my $URI = shift @ARGV unless not defined @ARGV;
-
-use Carp qw(croak); # Yay Coda bug.
-
+use Carp qw(croak);
 sub strip_non_main_artists
 {
 	croak "Oops no artist!" unless @_;
@@ -32,54 +29,51 @@ sub strip_non_main_artists
 	return \@a;
 }
 
-use URI;
-use URI::Escape;
+my $URI = shift @ARGV unless not @ARGV;
+
 use LWP::Simple;
-use JSON;
+my $content = get($URI);
 
-use constant APIROOT => "http://api.beatport.com/catalog/3/beatport/";
+use HTML::Query 'Query';
 
-my $u = URI->new($URI);
-
-my (undef, $type, $nicename, $id) = split('/', $u->path);
-
-if($type ne 'release')
-{ croak "Sorry, only releases are supported right now."; }
-
-my $queryURI = APIROOT . $type . '?id=' . $id;
-my $content = get($queryURI);
-my $j = decode_json $content;
+my $c = Query( text => $content, 'div.release-detail' );
 
 my %release;
 
-{
-	my $r = $j->{'results'}->{'release'};
-	$release{'title'} = $r->{'name'};
-	$release{'artist'} = strip_non_main_artists(@{$r->{'artists'}});
-	($release{'relyear'}, $release{'relmonth'}, $release{'relday'}) = (split(/-/, $r->{'releaseDate'}));
-	$release{'label'} = $r->{'label'}->{'name'};
-	$release{'catno'} = $r->{'catalogNumber'};
-	$release{'meta'}{'type'} = $r->{'type'};
-	$release{'meta'}{'slug'} = $r->{'slug'};
-	$release{'meta'}{'id'} = $r->{'id'};
-}
+# Query first for the catalog number
+my $catno = $c->query('table.meta-data td.meta-data-value');
+$release{'catno'} = $catno->last->as_text;
 
-for(my $i = 0; $i < $j->{'metadata'}->{'tracks'}->{'count'}; $i++)
+# And then for the tracks on the release
+my @tracks = $c->query('span[data-json]')->attr('data-json');
+
+use JSON qw(decode_json);
+
+my $r = decode_json $tracks[0];
+$release{'title'} = $r->{'release'}->{'name'};
+$release{'artist'} = strip_non_main_artists(@{$r->{'artists'}});
+($release{'relyear'}, $release{'relmonth'}, $release{'relday'}) = (split(/-/, $r->{'releaseDate'}));
+$release{'label'} = $r->{'label'}->{'name'};
+$release{'meta'}{'type'} = $r->{'type'};
+$release{'meta'}{'slug'} = $r->{'slug'};
+$release{'meta'}{'id'} = $r->{'id'};
+$release{'metadata'}{'track'}{'count'} = scalar @tracks;
+
+for(my $i = 0; $i < scalar @tracks; $i++)
 {
+	my $metadata = decode_json $tracks[$i];
 	my %track;
-	my $s = $j->{'results'}->{'tracks'}->[$i];
 
-	$track{'title'} = $s->{'title'};
-	$track{'length'} = $s->{'length'};
+	$track{'title'} = $metadata->{'title'};
+	$track{'length'} = $metadata->{'length'};
 
-	$track{'artist'} = strip_non_main_artists(@{$s->{'artists'}});
-
+	$track{'artist'} = strip_non_main_artists(@{$metadata->{'artists'}});
 	push @{$release{'tracks'}}, \%track;
 }
 
-$release{'editnote'} = "Imported from http://www.beatport.com/${release{'meta'}{'type'}}/${release{'meta'}{'slug'}}/${release{'meta'}{'id'}}";
+$release{'editnote'} = "Imported from $URI";
 
-use File::Temp qw(tempfile); # Yay Coda bug x2.
+use File::Temp qw(tempfile);
 
 my $tmp = File::Temp->new(
 	TEMPLATE => "beatport-${release{'meta'}{'id'}}-${release{'meta'}{'slug'}}-XXXXXX",
@@ -107,6 +101,7 @@ print $tmp <<HTML;
 <input type="hidden" name="date.month" value="${release{'relmonth'}}" />
 <input type="hidden" name="date.day" value="${release{'relday'}}" />
 <input type="hidden" name="mediums.0.format" value="Digital Media" />
+<input type="hidden" name="urls.0.url" value="$URI" />
 HTML
 
 my $i = 0;
@@ -119,7 +114,7 @@ for (@{$release{'tracks'}})
 }
 
 print $tmp <<HTML;
-<input type="hidden" name="edit_note" value="Imported from $u" />
+<input type="hidden" name="edit_note" value="${release{'editnote'}}" />
 <input type="hidden" name="as_auto_editor" value="1" />
 <input type="submit" value="Just click me" />
 </form>
@@ -133,9 +128,4 @@ system(@cmd);
 sleep 5;
 
 __END__
-http://api.beatport.com/
-
-http://api.beatport.com/beatport-detail-pages.html
-
-http://www.beatport.com/release/different-morals/393408
-
+http://www.beatport.com/release/rockin-n-rollin-the-remixes/1143465
