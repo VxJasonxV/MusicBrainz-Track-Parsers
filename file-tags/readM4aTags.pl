@@ -24,20 +24,20 @@ sub convertMsToTime
 		$ms -= 1000;
 		$sec++;
 	}
-	
+
 	# Ensure there's a leading 0 on the number of seconds.
 	$sec = sprintf("%02d", $sec);
-	
+
 	# Return value formatted MM:SS. Cute :).
 	return "${min}:${sec}";
 }
 
 opendir(my $dh, $ARGV[0]) || die "What a boob. Directory FAIL! $!";
-my @files = grep { /\.m4a/ } readdir($dh);
+my @files = grep { /\.m4a|\.mp4/ } readdir($dh);
 
 my ($tags, $length, $trackNr, $artist, $title, $album);
 my $i=1;
-	
+
 foreach(@files)
 {
 	$tags = Audio::Scan->scan("$ARGV[0]/$_");
@@ -47,9 +47,9 @@ foreach(@files)
 	$trackNr =~ s{/.*}{};
 	$title = ${tags}->{'tags'}->{'NAM'} || "Unknown Title";
 	$artist = ${tags}->{'tags'}->{'ART'} || "Unknown Artist";
-	
+
 	print "${trackNr}.	${title} - ${artist}	${length}\n";
-	
+
 	$i++;
 }
 
