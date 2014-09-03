@@ -20,6 +20,10 @@ Ex. `perl bandcamp.pl "http://rainbowdragoneyes.bandcamp.com/track/seize-my-day"
 
 Artists with only one Album/Track will have that information automatically printed. Otherwise a track will be resolved back to it's release, or printed as-is. An album will be printed as-is. And artist URL with multiple albums will list albums and URLs suitable for immediately copying back into execution.
 
+## Issues? ##
+
+[Let me know!](https://github.com/VxJasonxV/MusicBrainz-Track-Parsers/issues/new?labels[]=bandcamp)
+
 ## Roadmap / Wishlist ##
 
 * Refactor

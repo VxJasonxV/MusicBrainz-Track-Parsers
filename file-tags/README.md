@@ -7,7 +7,17 @@
 
 ## Usage ##
 
-Invoke a file format script suitable for the media in your files, pipe to sort if necessary.
+Invoke a file format script suitable for the media in your files, pipe to sort if necessary. e.g.
+
+```bash
+perl readFlacTags.pl "~/Music/Album Zero (2012)/*.flac"
+perl readM4aTags.pl "~/Music/Album Eternus (2013)/*.{m4a,mp4}"
+perl readMp3Tags.pl "~/Music/Album Payday (2014)/*.mp3"
+```
+
+## Issues? ##
+
+[Let me know!](https://github.com/VxJasonxV/MusicBrainz-Track-Parsers/issues/new?labels[]=file-parsers)
 
 ## Roadmap / Wishlist ##
 

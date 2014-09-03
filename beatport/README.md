@@ -17,7 +17,7 @@ Ex. `perl beatport.pl "http://www.beatport.com/release/different-morals/393408"`
 
 ## Caveats ##
 
-Artist information may be quite a bit wacky, mostly because Beatport's artist classification is insanity. Please take care to check that all artist credits are correct. If you know more than me about how Beatport represents their artists, [let me know!](https://github.com/VxJasonxV/MusicBrainz-Track-Parsers/issues)
+Artist information may be quite a bit wacky, mostly because Beatport's artist classification is insanity. Please take care to check that all artist credits are correct. If you know more than me about how Beatport represents their artists, [let me know!](https://github.com/VxJasonxV/MusicBrainz-Track-Parsers/issues/new?labels[]=beatport)
 
 ## Roadmap / Wishlist ##
 
