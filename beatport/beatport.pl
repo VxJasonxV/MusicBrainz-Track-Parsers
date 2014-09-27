@@ -10,7 +10,7 @@ sub strip_non_main_artists
 {
 	croak "Oops no artist!" unless @_;
 
-	my @artists = shift @_;
+	my @artists = @_;
 
 	if( scalar(@artists) == 1)
 	{ return $artists[0]->{'name'}; }
@@ -26,7 +26,7 @@ sub strip_non_main_artists
 		push @a, $_->{'name'};
 	}
 
-	return \@a;
+	return @a;
 }
 
 my $URI = shift @ARGV unless not @ARGV;
@@ -44,6 +44,9 @@ my %release;
 my $catno = $c->query('table.meta-data td.meta-data-value');
 $release{'catno'} = $catno->last->as_text;
 
+# Get the release artist which is only guarenteed to be in the page header
+$release{'artist'} = ($c->query('div.lastUnit > div.txt-uppercase')->as_trimmed_text)[0];
+
 # And then for the tracks on the release
 my @tracks = $c->query('span[data-json]')->attr('data-json');
 
@@ -51,7 +54,6 @@ use JSON qw(decode_json);
 
 my $r = decode_json $tracks[0];
 $release{'title'} = $r->{'release'}->{'name'};
-$release{'artist'} = strip_non_main_artists(@{$r->{'artists'}});
 ($release{'relyear'}, $release{'relmonth'}, $release{'relday'}) = (split(/-/, $r->{'releaseDate'}));
 $release{'label'} = $r->{'label'}->{'name'};
 $release{'meta'}{'type'} = $r->{'type'};
@@ -67,7 +69,7 @@ for(my $i = 0; $i < scalar @tracks; $i++)
 	$track{'title'} = $metadata->{'title'};
 	$track{'length'} = $metadata->{'length'};
 
-	$track{'artist'} = strip_non_main_artists(@{$metadata->{'artists'}});
+	@{$track{'artists'}} = strip_non_main_artists(@{$metadata->{'artists'}});
 	push @{$release{'tracks'}}, \%track;
 }
 
@@ -82,6 +84,7 @@ my $tmp = File::Temp->new(
 );
 
 binmode( $tmp, ":utf8" );
+my ($i, $j);
 
 # http://musicbrainz.org/doc/Release_Editor_Seeding
 print $tmp <<HTML;
@@ -104,12 +107,18 @@ print $tmp <<HTML;
 <input type="hidden" name="urls.0.url" value="$URI" />
 HTML
 
-my $i = 0;
-for (@{$release{'tracks'}})
+my ($t, $a);
+$i = 0;
+for $t (@{$release{'tracks'}})
 {
-	print $tmp "<input type='hidden' name='mediums.0.track.$i.name' value=\"$_->{'title'}\" />\n";
-	print $tmp "<input type='hidden' name='mediums.0.track.$i.artist_credit.names.0.name' value=\"$_->{'artist'}\" />\n";
-	print $tmp "<input type='hidden' name='mediums.0.track.$i.length' value=\"$_->{'length'}\" />\n";
+	print $tmp "<input type='hidden' name='mediums.0.track.$i.name' value=\"$t->{'title'}\" />\n";
+	$j = 0;
+	for $a (@{$t->{'artists'}})
+	{
+		print $tmp "<input type='hidden' name='mediums.0.track.$i.artist_credit.names.$j.name' value='$a' />\n";
+		$j++;
+	}
+	print $tmp "<input type='hidden' name='mediums.0.track.$i.length' value=\"$t->{'length'}\" />\n";
 	$i++;
 }
 
