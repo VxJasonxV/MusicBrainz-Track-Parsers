@@ -29,7 +29,12 @@ sub strip_non_main_artists
 	return @a;
 }
 
-my $URI = shift @ARGV unless not @ARGV;
+if (not @ARGV)
+{
+	croak "Please provide a URL, ex.: perl $0 'http://www.beatport.com/release/stay-the-night/1187110'";
+}
+
+my $URI = shift @ARGV;
 
 use LWP::Simple;
 my $content = get($URI);
@@ -90,7 +95,7 @@ my ($i, $j);
 print $tmp <<HTML;
 <html>
 <head>
-<title>Submit release to MusicBrainz</title>
+<title>Submit ${release{'title'}} to MusicBrainz</title>
 </head>
 <body>
 <form action="http://musicbrainz.org/release/add" method="post">
